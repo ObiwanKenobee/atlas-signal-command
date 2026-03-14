@@ -17,6 +17,30 @@ export default function Contact() {
     name: "", email: "", organization: "", orgType: "", problemArea: "", region: "", urgency: "", description: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      const { error } = await supabase.from("leads").insert({
+        name: form.name,
+        email: form.email,
+        organization: form.organization,
+        organization_type: form.orgType,
+        sector: form.problemArea,
+        region: form.region,
+        urgency: form.urgency,
+        message: form.description,
+      });
+      if (error) throw error;
+      setSubmitted(true);
+    } catch (error: any) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const steps = [
     {
