@@ -4,6 +4,8 @@ import { ArrowRight, ArrowLeft, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const orgTypes = ["Government", "Development Agency", "NGO / Non-Profit", "Private Sector", "Academic / Research", "Other"];
 const problemAreas = ["Land Systems", "Ocean & Water", "Human Health", "Infrastructure", "Economic Flows", "Governance", "Cross-Sector"];
@@ -15,6 +17,30 @@ export default function Contact() {
     name: "", email: "", organization: "", orgType: "", problemArea: "", region: "", urgency: "", description: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      const { error } = await supabase.from("leads").insert({
+        name: form.name,
+        email: form.email,
+        organization: form.organization,
+        organization_type: form.orgType,
+        sector: form.problemArea,
+        region: form.region,
+        urgency: form.urgency,
+        message: form.description,
+      });
+      if (error) throw error;
+      setSubmitted(true);
+    } catch (error: any) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const steps = [
     {
@@ -182,8 +208,8 @@ export default function Contact() {
                 Continue <ArrowRight className="h-4 w-4" />
               </Button>
             ) : (
-              <Button onClick={() => setSubmitted(true)} className="bg-primary text-primary-foreground gap-2">
-                Submit Request <ArrowRight className="h-4 w-4" />
+              <Button onClick={handleSubmit} disabled={loading} className="bg-primary text-primary-foreground gap-2">
+                {loading ? "Submitting..." : "Submit Request"} <ArrowRight className="h-4 w-4" />
               </Button>
             )}
           </div>

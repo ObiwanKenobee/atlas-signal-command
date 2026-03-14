@@ -6,10 +6,12 @@ import { Button } from "@/components/ui/button";
 
 const navItems = [
   { label: "Home", path: "/" },
+  { label: "About", path: "/about" },
   { label: "What We Do", path: "/services" },
   { label: "Sectors", path: "/sectors" },
   { label: "Intelligence", path: "/insights" },
   { label: "Case Studies", path: "/case-studies" },
+  { label: "Pricing", path: "/pricing" },
   { label: "Contact", path: "/contact" },
 ];
 
@@ -52,9 +54,9 @@ export function Navbar() {
               Book Strategy Call
             </Button>
           </Link>
-          <Link to="/insights">
+          <Link to="/login">
             <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
-              Explore Reports
+              Client Portal
             </Button>
           </Link>
         </div>
@@ -98,9 +100,9 @@ export function Navbar() {
                     Book Strategy Call
                   </Button>
                 </Link>
-                <Link to="/insights" onClick={() => setMobileOpen(false)}>
+                <Link to="/login" onClick={() => setMobileOpen(false)}>
                   <Button size="sm" className="w-full bg-primary text-primary-foreground">
-                    Explore Reports
+                    Client Portal
                   </Button>
                 </Link>
               </div>
