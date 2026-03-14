@@ -4,6 +4,8 @@ import { ArrowRight, ArrowLeft, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const orgTypes = ["Government", "Development Agency", "NGO / Non-Profit", "Private Sector", "Academic / Research", "Other"];
 const problemAreas = ["Land Systems", "Ocean & Water", "Human Health", "Infrastructure", "Economic Flows", "Governance", "Cross-Sector"];
