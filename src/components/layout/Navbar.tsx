@@ -100,9 +100,9 @@ export function Navbar() {
                     Book Strategy Call
                   </Button>
                 </Link>
-                <Link to="/insights" onClick={() => setMobileOpen(false)}>
+                <Link to="/login" onClick={() => setMobileOpen(false)}>
                   <Button size="sm" className="w-full bg-primary text-primary-foreground">
-                    Explore Reports
+                    Client Portal
                   </Button>
                 </Link>
               </div>
