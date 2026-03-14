@@ -208,8 +208,8 @@ export default function Contact() {
                 Continue <ArrowRight className="h-4 w-4" />
               </Button>
             ) : (
-              <Button onClick={() => setSubmitted(true)} className="bg-primary text-primary-foreground gap-2">
-                Submit Request <ArrowRight className="h-4 w-4" />
+              <Button onClick={handleSubmit} disabled={loading} className="bg-primary text-primary-foreground gap-2">
+                {loading ? "Submitting..." : "Submit Request"} <ArrowRight className="h-4 w-4" />
               </Button>
             )}
           </div>
