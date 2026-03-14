@@ -54,9 +54,9 @@ export function Navbar() {
               Book Strategy Call
             </Button>
           </Link>
-          <Link to="/insights">
+          <Link to="/login">
             <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
-              Explore Reports
+              Client Portal
             </Button>
           </Link>
         </div>
