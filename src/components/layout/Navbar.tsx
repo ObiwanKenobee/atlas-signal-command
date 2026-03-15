@@ -11,6 +11,7 @@ const navItems = [
   { label: "Sectors", path: "/sectors" },
   { label: "Intelligence", path: "/insights" },
   { label: "Case Studies", path: "/case-studies" },
+  { label: "Community", path: "/community/signals" },
   { label: "Pricing", path: "/pricing" },
   { label: "Contact", path: "/contact" },
 ];
