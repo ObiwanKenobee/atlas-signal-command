@@ -17,7 +17,9 @@ const footerLinks = {
   Resources: [
     { label: "Reports", path: "/insights" },
     { label: "Atlas Media", path: "/insights" },
-    { label: "Community", path: "/contact" },
+    { label: "Community Signals", path: "/community/signals" },
+    { label: "Submit Signal", path: "/community/submit" },
+    { label: "Impact Stories", path: "/community/stories" },
   ],
 };
 

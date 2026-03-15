@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Check, ArrowRight, Zap, Shield, Globe, Star, ChevronDown, ChevronUp } from "lucide-react";
+import { Check, ArrowRight, Zap, Shield, Globe, Star, ChevronDown, ChevronUp, Calculator, TrendingUp, DollarSign, BarChart3 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
+import { Input } from "@/components/ui/input";
 
 const tiers = [
   {
@@ -23,6 +24,7 @@ const tiers = [
     ],
     cta: "Start Exploring",
     highlighted: false,
+    locked: [],
   },
   {
     name: "Operator",
@@ -43,6 +45,7 @@ const tiers = [
     ],
     cta: "Become an Operator",
     highlighted: true,
+    locked: [],
   },
   {
     name: "Command",
@@ -65,6 +68,7 @@ const tiers = [
     ],
     cta: "Request Command Access",
     highlighted: false,
+    locked: [],
   },
 ];
 
@@ -82,12 +86,30 @@ export default function Pricing() {
   const [selectedScope, setSelectedScope] = useState(0);
   const [urgency, setUrgency] = useState([50]);
   const [showCalculator, setShowCalculator] = useState(false);
+  const [showROI, setShowROI] = useState(false);
 
-  // Simple pricing estimate based on inputs
+  // ROI Calculator
+  const [currentCosts, setCurrentCosts] = useState(500000);
+  const [inefficiency, setInefficiency] = useState([20]);
+  const [riskExposure, setRiskExposure] = useState([30]);
+  const [populationAffected, setPopulationAffected] = useState(50000);
+
+  // Pricing simulator
   const basePrice = [2000, 5000, 15000, 35000][selectedScope];
   const urgencyMultiplier = 1 + (urgency[0] / 100) * 0.5;
   const estimated = Math.round(basePrice * urgencyMultiplier);
   const recommendedTier = estimated < 2000 ? "Explorer" : estimated < 15000 ? "Operator" : "Command";
+
+  // ROI calculations
+  const roiResults = useMemo(() => {
+    const wastedCosts = currentCosts * (inefficiency[0] / 100);
+    const potentialSavings = wastedCosts * 0.6;
+    const avoidedLosses = currentCosts * (riskExposure[0] / 100) * 0.4;
+    const totalValue = potentialSavings + avoidedLosses;
+    const annualInvestment = estimated * 12;
+    const roiMultiple = annualInvestment > 0 ? totalValue / annualInvestment : 0;
+    return { potentialSavings, avoidedLosses, totalValue, roiMultiple, annualInvestment };
+  }, [currentCosts, inefficiency, riskExposure, estimated]);
 
   return (
     <>
@@ -163,8 +185,51 @@ export default function Pricing() {
         </div>
       </section>
 
+      {/* Feature Comparison */}
+      <section className="px-6 py-16 bg-card/50">
+        <div className="atlas-container max-w-5xl">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-10">
+            <h2 className="font-display text-3xl font-bold text-foreground mb-4">Feature Comparison</h2>
+          </motion.div>
+          <div className="atlas-card overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="text-left p-4 text-muted-foreground font-medium">Feature</th>
+                    <th className="p-4 text-center text-foreground font-semibold">Explorer</th>
+                    <th className="p-4 text-center text-primary font-semibold border-x border-primary/10 bg-primary/5">Operator</th>
+                    <th className="p-4 text-center text-foreground font-semibold">Command</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    ["Sector Reports", "Curated", "Full Access", "Custom + Full"],
+                    ["Dashboards", "Limited", "Interactive", "Real-time Custom"],
+                    ["Scenario Modeling", "—", "Snapshots", "Full Engine"],
+                    ["Advisory Calls", "Quarterly", "Monthly", "Continuous"],
+                    ["Recommendations Feed", "—", "✓", "✓"],
+                    ["Signal Monitoring", "—", "—", "Real-time"],
+                    ["Embedded Strategist", "—", "—", "✓"],
+                    ["SLA Support", "Email", "Priority", "SLA-backed"],
+                    ["Report Builder", "—", "—", "✓"],
+                  ].map(([feature, explorer, operator, command], i) => (
+                    <tr key={i} className="border-b border-border last:border-0">
+                      <td className="p-4 text-muted-foreground">{feature}</td>
+                      <td className="p-4 text-center text-foreground">{explorer}</td>
+                      <td className="p-4 text-center text-foreground border-x border-primary/10 bg-primary/5">{operator}</td>
+                      <td className="p-4 text-center text-foreground">{command}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Interactive Pricing Simulator */}
-      <section className="px-6 py-20 bg-card/50">
+      <section className="px-6 py-20 bg-background">
         <div className="atlas-container">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
             <h2 className="font-display text-3xl font-bold text-foreground mb-4">Atlas Value Simulator</h2>
@@ -173,7 +238,8 @@ export default function Pricing() {
               onClick={() => setShowCalculator(!showCalculator)}
               className="mt-4 inline-flex items-center gap-2 text-primary text-sm font-medium hover:underline"
             >
-              {showCalculator ? "Hide Simulator" : "Open Simulator"}
+              <Calculator className="h-4 w-4" />
+              {showCalculator ? "Hide Simulator" : "Open Pricing Simulator"}
               {showCalculator ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
             </button>
           </motion.div>
@@ -181,55 +247,29 @@ export default function Pricing() {
           {showCalculator && (
             <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} className="max-w-3xl mx-auto">
               <div className="atlas-card p-8 space-y-8">
-                {/* Sector */}
                 <div>
                   <label className="text-sm font-medium text-foreground mb-3 block">Sector Focus</label>
                   <div className="flex flex-wrap gap-2">
                     {sectors.map((s, i) => (
-                      <button
-                        key={s}
-                        onClick={() => setSelectedSector(i)}
-                        className={`atlas-chip cursor-pointer transition-colors ${
-                          selectedSector === i ? "bg-primary/15 text-primary border-primary/30" : ""
-                        }`}
-                      >
-                        {s}
-                      </button>
+                      <button key={s} onClick={() => setSelectedSector(i)} className={`atlas-chip cursor-pointer transition-colors ${selectedSector === i ? "bg-primary/15 text-primary border-primary/30" : ""}`}>{s}</button>
                     ))}
                   </div>
                 </div>
-
-                {/* Scope */}
                 <div>
                   <label className="text-sm font-medium text-foreground mb-3 block">Geographic Scope</label>
                   <div className="flex flex-wrap gap-2">
                     {scopes.map((s, i) => (
-                      <button
-                        key={s}
-                        onClick={() => setSelectedScope(i)}
-                        className={`atlas-chip cursor-pointer transition-colors ${
-                          selectedScope === i ? "bg-primary/15 text-primary border-primary/30" : ""
-                        }`}
-                      >
-                        {s}
-                      </button>
+                      <button key={s} onClick={() => setSelectedScope(i)} className={`atlas-chip cursor-pointer transition-colors ${selectedScope === i ? "bg-primary/15 text-primary border-primary/30" : ""}`}>{s}</button>
                     ))}
                   </div>
                 </div>
-
-                {/* Urgency */}
                 <div>
-                  <label className="text-sm font-medium text-foreground mb-3 block">
-                    Urgency Level: {urgency[0]}%
-                  </label>
+                  <label className="text-sm font-medium text-foreground mb-3 block">Urgency Level: {urgency[0]}%</label>
                   <Slider value={urgency} onValueChange={setUrgency} max={100} step={5} className="w-full" />
                   <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                    <span>Exploratory</span>
-                    <span>Critical</span>
+                    <span>Exploratory</span><span>Critical</span>
                   </div>
                 </div>
-
-                {/* Output */}
                 <div className="border-t border-border pt-6">
                   <div className="grid sm:grid-cols-3 gap-6">
                     <div>
@@ -257,6 +297,91 @@ export default function Pricing() {
         </div>
       </section>
 
+      {/* ROI Calculator */}
+      <section className="px-6 py-20 bg-card/50">
+        <div className="atlas-container">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+            <h2 className="font-display text-3xl font-bold text-foreground mb-4">ROI Calculator</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">Input your current costs and risk profile to see what Atlas intelligence could save you.</p>
+            <button onClick={() => setShowROI(!showROI)} className="mt-4 inline-flex items-center gap-2 text-primary text-sm font-medium hover:underline">
+              <TrendingUp className="h-4 w-4" />
+              {showROI ? "Hide Calculator" : "Open ROI Calculator"}
+              {showROI ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            </button>
+          </motion.div>
+
+          {showROI && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-4xl mx-auto">
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Inputs */}
+                <div className="atlas-card p-8 space-y-6">
+                  <h3 className="font-display text-lg font-semibold text-foreground">Your Profile</h3>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-2 block">Annual Operating Costs (USD)</label>
+                    <div className="relative">
+                      <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input type="number" value={currentCosts} onChange={(e) => setCurrentCosts(Number(e.target.value))} className="pl-10 bg-secondary border-border" />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-2 block">Estimated Inefficiency: {inefficiency[0]}%</label>
+                    <Slider value={inefficiency} onValueChange={setInefficiency} max={60} step={1} className="w-full" />
+                    <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                      <span>Well optimized</span><span>Highly inefficient</span>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-2 block">Risk Exposure: {riskExposure[0]}%</label>
+                    <Slider value={riskExposure} onValueChange={setRiskExposure} max={80} step={1} className="w-full" />
+                    <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                      <span>Low risk</span><span>High exposure</span>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-2 block">Population Affected</label>
+                    <Input type="number" value={populationAffected} onChange={(e) => setPopulationAffected(Number(e.target.value))} className="bg-secondary border-border" />
+                  </div>
+                </div>
+
+                {/* Results */}
+                <div className="atlas-card p-8 space-y-6">
+                  <h3 className="font-display text-lg font-semibold text-foreground">Projected Value</h3>
+                  <div className="space-y-4">
+                    <div className="p-4 rounded-lg bg-secondary/50 border border-border">
+                      <p className="text-xs text-muted-foreground mb-1">Potential Cost Savings</p>
+                      <p className="font-display text-2xl font-bold atlas-gradient-text">${roiResults.potentialSavings.toLocaleString(undefined, { maximumFractionDigits: 0 })}</p>
+                    </div>
+                    <div className="p-4 rounded-lg bg-secondary/50 border border-border">
+                      <p className="text-xs text-muted-foreground mb-1">Avoided Losses</p>
+                      <p className="font-display text-2xl font-bold text-foreground">${roiResults.avoidedLosses.toLocaleString(undefined, { maximumFractionDigits: 0 })}</p>
+                    </div>
+                    <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
+                      <p className="text-xs text-primary mb-1">Total Projected Value</p>
+                      <p className="font-display text-3xl font-bold atlas-gradient-text">${roiResults.totalValue.toLocaleString(undefined, { maximumFractionDigits: 0 })}</p>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="p-4 rounded-lg bg-secondary/50 border border-border text-center">
+                        <p className="text-xs text-muted-foreground mb-1">Annual Investment</p>
+                        <p className="font-display text-lg font-bold text-foreground">${roiResults.annualInvestment.toLocaleString()}</p>
+                      </div>
+                      <div className="p-4 rounded-lg bg-secondary/50 border border-border text-center">
+                        <p className="text-xs text-muted-foreground mb-1">ROI Multiple</p>
+                        <p className="font-display text-lg font-bold atlas-gradient-text">{roiResults.roiMultiple.toFixed(1)}x</p>
+                      </div>
+                    </div>
+                  </div>
+                  <Link to="/contact">
+                    <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 gap-2">
+                      Discuss Your ROI <ArrowRight className="h-4 w-4" />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </div>
+      </section>
+
       {/* Strategic Engagements */}
       <section className="px-6 py-20 bg-background">
         <div className="atlas-container">
@@ -271,8 +396,7 @@ export default function Pricing() {
                 <p className="font-display text-xl font-bold atlas-gradient-text mb-3">{e.range}</p>
                 <p className="text-sm text-muted-foreground mb-4">{e.description}</p>
                 <div className="flex items-center gap-2 text-xs text-muted-foreground border-t border-border pt-3">
-                  <Zap className="h-3 w-3 text-primary" />
-                  Timeline: {e.timeline}
+                  <Zap className="h-3 w-3 text-primary" /> Timeline: {e.timeline}
                 </div>
               </motion.div>
             ))}
