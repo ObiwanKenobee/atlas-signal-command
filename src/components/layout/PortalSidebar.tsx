@@ -20,6 +20,7 @@ const items = [
   { title: "Dashboard", url: "/portal/dashboard", icon: LayoutDashboard },
   { title: "Projects", url: "/portal/projects", icon: FolderKanban },
   { title: "Reports", url: "/portal/reports", icon: FileText },
+  { title: "Simulations", url: "/portal/simulations", icon: Activity },
   { title: "Recommendations", url: "/portal/recommendations", icon: Lightbulb },
 ];
 
