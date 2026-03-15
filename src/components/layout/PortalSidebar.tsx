@@ -1,4 +1,4 @@
-import { LayoutDashboard, FolderKanban, FileText, Lightbulb, Settings, LogOut, Home } from "lucide-react";
+import { LayoutDashboard, FolderKanban, FileText, Lightbulb, Settings, LogOut, Home, Activity } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
