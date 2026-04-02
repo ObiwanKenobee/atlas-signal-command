@@ -16,6 +16,10 @@ import Contact from "./pages/Contact";
 import About from "./pages/About";
 import Pricing from "./pages/Pricing";
 import Login from "./pages/Login";
+import Media from "./pages/Media";
+import LandSystems from "./pages/sectors/LandSystems";
+import OceanWater from "./pages/sectors/OceanWater";
+import HumanHealth from "./pages/sectors/HumanHealth";
 import PortalDashboard from "./pages/portal/Dashboard";
 import PortalProjects from "./pages/portal/Projects";
 import PortalReports from "./pages/portal/Reports";
@@ -24,6 +28,7 @@ import PortalSimulations from "./pages/portal/Simulations";
 import CommandCenter from "./pages/workspace/CommandCenter";
 import WorkspaceLeads from "./pages/workspace/Leads";
 import WorkspaceResearch from "./pages/workspace/Research";
+import ReportBuilder from "./pages/workspace/ReportBuilder";
 import CommunitySignals from "./pages/community/Signals";
 import SubmitSignal from "./pages/community/SubmitSignal";
 import CommunityStories from "./pages/community/Stories";
@@ -44,12 +49,16 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/services" element={<Services />} />
               <Route path="/sectors" element={<Sectors />} />
+              <Route path="/sectors/land" element={<LandSystems />} />
+              <Route path="/sectors/oceans" element={<OceanWater />} />
+              <Route path="/sectors/health" element={<HumanHealth />} />
               <Route path="/insights" element={<Insights />} />
               <Route path="/case-studies" element={<CaseStudies />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/about" element={<About />} />
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/media" element={<Media />} />
               {/* Community (public) */}
               <Route path="/community/signals" element={<CommunitySignals />} />
               <Route path="/community/submit" element={<SubmitSignal />} />
@@ -68,6 +77,7 @@ const App = () => (
               <Route path="/workspace/command-center" element={<CommandCenter />} />
               <Route path="/workspace/leads" element={<WorkspaceLeads />} />
               <Route path="/workspace/research" element={<WorkspaceResearch />} />
+              <Route path="/workspace/report-builder" element={<ReportBuilder />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
