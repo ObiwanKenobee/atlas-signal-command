@@ -12,6 +12,7 @@ const navItems = [
   { label: "Intelligence", path: "/insights" },
   { label: "Case Studies", path: "/case-studies" },
   { label: "Community", path: "/community/signals" },
+  { label: "Media", path: "/media" },
   { label: "Pricing", path: "/pricing" },
   { label: "Contact", path: "/contact" },
 ];
