@@ -11,11 +11,9 @@ import { Button } from "@/components/ui/button";
 const items = [
   { title: "Command Center", url: "/workspace/command-center", icon: LayoutDashboard },
   { title: "Leads / CRM", url: "/workspace/leads", icon: Users },
-  { title: "Projects", url: "/workspace/projects", icon: FolderKanban },
   { title: "Research", url: "/workspace/research", icon: BookOpen },
-  { title: "Reports", url: "/workspace/reports", icon: FileText },
+  { title: "Report Builder", url: "/workspace/report-builder", icon: FileText },
   { title: "Community Signals", url: "/workspace/community", icon: Radio },
-  { title: "Media", url: "/workspace/media", icon: Megaphone },
 ];
 
 export function WorkspaceSidebar() {
